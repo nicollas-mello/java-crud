@@ -29,4 +29,15 @@ public class UserEntityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UserEntity> updateUser(@RequestBody UserEntity userEntity,@PathVariable Integer id) {
+        UserEntity updateUser = userEntityService.updateUser(userEntity, id);
+        return ResponseEntity.status(HttpStatus.OK).body(updateUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Integer id) {
+        userEntityService.deleteUser(id);
+    }
+
 }
