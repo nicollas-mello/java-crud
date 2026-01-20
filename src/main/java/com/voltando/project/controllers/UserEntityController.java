@@ -1,5 +1,7 @@
 package com.voltando.project.controllers;
 
+import com.voltando.project.dtos.UserCreateDto;
+import com.voltando.project.dtos.UserResponseDto;
 import com.voltando.project.entities.UserEntity;
 import com.voltando.project.services.UserEntityService;
 import org.springframework.http.HttpStatus;
@@ -19,19 +21,19 @@ public class UserEntityController {
     }
 
     @GetMapping
-    public List<UserEntity> listAll() {
-        return userEntityService.listAll();
+    public List<UserResponseDto> listAll() {
+        return userEntityService.listUsers();
     }
 
     @PostMapping
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity userEntity) {
-        UserEntity savedUser = userEntityService.createUser(userEntity);
+    public ResponseEntity<UserEntity> createUser(@RequestBody UserCreateDto userCreateDto) {
+        UserEntity savedUser = userEntityService.createUser(userCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserEntity> updateUser(@RequestBody UserEntity userEntity,@PathVariable Integer id) {
-        UserEntity updateUser = userEntityService.updateUser(userEntity, id);
+    public ResponseEntity<UserEntity> updateUser(@RequestBody UserCreateDto userCreateDto,@PathVariable Integer id) {
+        UserEntity updateUser = userEntityService.updateUser(userCreateDto, id);
         return ResponseEntity.status(HttpStatus.OK).body(updateUser);
     }
 
