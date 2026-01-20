@@ -1,5 +1,7 @@
 package com.voltando.project.services;
 
+import com.voltando.project.dtos.UserCreateDto;
+import com.voltando.project.dtos.UserResponseDto;
 import com.voltando.project.entities.UserEntity;
 import com.voltando.project.repositories.UserEntityRepository;
 import org.springframework.stereotype.Service;
@@ -15,21 +17,31 @@ public class UserEntityService {
         this.userEntityRepository = userEntityRepository;
     }
 
-    public List<UserEntity> listAll() {
-        return userEntityRepository.findAll();
+    public List<UserResponseDto> listUsers() {
+        return userEntityRepository.findAll()
+                .stream()
+                .map(user -> new UserResponseDto(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getEmail()
+                ))
+                .toList();
     }
 
-    public UserEntity createUser(UserEntity userEntity) {
+    public UserEntity createUser(UserCreateDto userCreateDto) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(userCreateDto.getUsername());
+        userEntity.setEmail(userCreateDto.getEmail());
+        userEntity.setSalary(userCreateDto.getSalary());
+
         return userEntityRepository.save(userEntity);
     }
 
-    public UserEntity updateUser(UserEntity updateUserEntity, Integer id) {
-
+    public UserEntity updateUser(UserCreateDto userCreateDto, Integer id) {
         UserEntity userEntity = userEntityRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-        userEntity.setUsername(updateUserEntity.getUsername());
-        userEntity.setEmail(updateUserEntity.getEmail());
-
+        userEntity.setUsername(userCreateDto.getUsername());
+        userEntity.setEmail(userCreateDto.getEmail());
+        userEntity.setSalary(userCreateDto.getSalary());
 
         return userEntityRepository.save(userEntity);
     }
