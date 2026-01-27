@@ -8,7 +8,6 @@ public class CreateExpenseDto {
     private BigDecimal value;
     private Date date;
     private String category;
-    private Integer userId;
 
     public String getDescription() {
         return description;
@@ -42,11 +41,4 @@ public class CreateExpenseDto {
         this.category = category;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 }
