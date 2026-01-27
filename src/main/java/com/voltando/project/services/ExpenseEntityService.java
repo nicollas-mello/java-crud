@@ -7,6 +7,8 @@ import com.voltando.project.entities.ExpenseEntity;
 import com.voltando.project.entities.UserEntity;
 import com.voltando.project.repositories.ExpenseEntityRepository;
 import com.voltando.project.repositories.UserEntityRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,14 @@ public class ExpenseEntityService {
         this.userEntityRepository = userEntityRepository;
     }
 
+    private UserEntity getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        return userEntityRepository.findByEmail(username)
+                .orElseThrow(() -> new RuntimeException("Usuário não autenticado"));
+    }
+
     public List<ListExpenseDto> listByUserId(Integer userId) {
         return expenseEntityRepository.findByUserEntityId(userId)
                 .stream()
@@ -37,8 +47,8 @@ public class ExpenseEntityService {
     }
 
     public ExpenseEntity createExpense(CreateExpenseDto dto) {
-        UserEntity user = userEntityRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        UserEntity user = getAuthenticatedUser();
 
         ExpenseEntity expense = new ExpenseEntity();
         expense.setDescription(dto.getDescription());
