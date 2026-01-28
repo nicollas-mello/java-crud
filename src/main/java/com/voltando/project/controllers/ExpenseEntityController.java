@@ -15,33 +15,38 @@ import java.util.List;
 @RequestMapping("/api/expenses")
 public class ExpenseEntityController {
 
-    private final ExpenseEntityService expenseEntityService;
+    private final ExpenseEntityService expenseService;
 
-    public ExpenseEntityController(ExpenseEntityService expenseEntityService) {
-        this.expenseEntityService = expenseEntityService;
+    public ExpenseEntityController(ExpenseEntityService expenseService) {
+        this.expenseService = expenseService;
     }
 
-    @GetMapping("/{id}")
-    public List<ListExpenseDto> listAllExpenseByUser(@PathVariable Integer id) {
-        return expenseEntityService.listByUserId(id);
+    @GetMapping
+    public List<ListExpenseDto> listUserExpenses() {
+        return expenseService.listUserExpenses();
     }
 
     @PostMapping
-    public ResponseEntity<ExpenseEntity> createUser(@RequestBody CreateExpenseDto expenseEntity) {
-        ExpenseEntity savedExpense = expenseEntityService.createExpense(expenseEntity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedExpense);
+    public ResponseEntity<ExpenseEntity> createExpense(
+            @RequestBody CreateExpenseDto dto
+    ) {
+        ExpenseEntity expense = expenseService.createExpense(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(expense);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ExpenseEntity> updateUser(@RequestBody UpdateExpenseDto expenseEntity, @PathVariable Integer id) {
-        ExpenseEntity updateExpense = expenseEntityService.updateExpense(expenseEntity, id);
-        return ResponseEntity.status(HttpStatus.OK).body(updateExpense);
+    public ResponseEntity<ExpenseEntity> updateExpense(
+            @PathVariable Integer id,
+            @RequestBody UpdateExpenseDto dto
+    ) {
+        ExpenseEntity updated = expenseService.updateExpense(dto, id);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteExpense(@PathVariable Integer id) {
-        expenseEntityService.deleteExpense(id);
+        expenseService.deleteExpense(id);
     }
-
-
 }
+
