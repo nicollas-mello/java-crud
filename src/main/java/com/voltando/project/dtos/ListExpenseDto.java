@@ -4,19 +4,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class ListExpenseDto {
-    private Integer id;
     private String description;
     private BigDecimal value;
     private Date date;
     private String category;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getDescription() {
         return description;
@@ -50,8 +42,7 @@ public class ListExpenseDto {
         this.category = category;
     }
 
-    public ListExpenseDto(Integer id, String description, BigDecimal value, Date date, String category) {
-        this.id = id;
+    public ListExpenseDto(String description, BigDecimal value, Date date, String category) {
         this.description = description;
         this.value = value;
         this.date = date;
